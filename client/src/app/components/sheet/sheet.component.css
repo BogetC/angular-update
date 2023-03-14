@@ -1,0 +1,10 @@
+.signature-ctn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+img.signature {
+  max-width: 200px;
+  height: auto;
+}

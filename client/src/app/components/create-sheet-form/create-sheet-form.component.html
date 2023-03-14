@@ -1,0 +1,73 @@
+<div class="container">
+  <h1 class="title is-1">Create an attendance sheet</h1>
+  <form #sheetForm="ngForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="name">Name</label>
+      <input
+        type="text"
+        class="input"
+        id="name"
+        name="name"
+        required
+        #name="ngModel"
+        [(ngModel)]="sheetFormModel.name"
+      />
+    </div>
+
+    <div
+      *ngIf="name.invalid && (name.dirty || name.touched)"
+      class="has-text-danger"
+    >
+      Name required
+    </div>
+
+    <div>
+      <label for="start">Start</label>
+      <input
+        type="datetime-local"
+        class="input"
+        id="start"
+        name="start"
+        required
+        #start="ngModel"
+        [(ngModel)]="sheetFormModel.start"
+      />
+    </div>
+
+    <div
+      *ngIf="start.invalid && (start.dirty || start.touched)"
+      class="has-text-danger"
+    >
+      Start date required
+    </div>
+
+    <div>
+      <label for="duration">Duration</label>
+      <input
+        type="number"
+        step="15"
+        class="input"
+        id="duration"
+        name="duration"
+        required
+        #duration="ngModel"
+        [(ngModel)]="sheetFormModel.duration"
+      />
+    </div>
+
+    <div
+      *ngIf="duration.invalid && (duration.dirty || duration.touched)"
+      class="has-text-danger"
+    >
+      Duration required
+    </div>
+
+    <button
+      type="submit"
+      class="button {{ sheetForm.valid ? 'is-success' : 'is-light' }}"
+      [disabled]="sheetForm.invalid"
+    >
+      Create sheet
+    </button>
+  </form>
+</div>

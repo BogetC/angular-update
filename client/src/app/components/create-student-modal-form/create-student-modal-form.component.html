@@ -1,0 +1,68 @@
+<div class="modal is-active">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Add student to attendance sheet</p>
+      <button
+        class="delete"
+        aria-label="close"
+        (click)="onModalClose()"
+      ></button>
+    </header>
+    <section class="modal-card-body">
+      <form #studentForm="ngForm" (ngSubmit)="onSubmitStudent()">
+        <div>
+          <label for="lastname">Lastname</label>
+          <input
+            type="text"
+            class="input"
+            id="lastname"
+            name="lastname"
+            required
+            #lastName="ngModel"
+            [(ngModel)]="studentFormModel.lastName"
+          />
+        </div>
+
+        <div
+          *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)"
+          class="has-text-danger"
+        >
+          Lastname required
+        </div>
+
+        <div>
+          <label for="firstname">Firstname</label>
+          <input
+            type="text"
+            class="input"
+            id="firstname"
+            name="firstname"
+            required
+            #firstName="ngModel"
+            [(ngModel)]="studentFormModel.firstName"
+          />
+        </div>
+
+        <div
+          *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"
+          class="has-text-danger"
+        >
+          Firstname required
+        </div>
+
+        <button
+          type="submit"
+          class="button {{ studentForm.valid ? 'is-success' : 'is-light' }}"
+          [disabled]="studentForm.invalid"
+        >
+          Add student
+        </button>
+      </form>
+    </section>
+
+    <footer class="modal-card-foot">
+      <button class="button" (click)="onModalClose()">Close</button>
+    </footer>
+  </div>
+</div>

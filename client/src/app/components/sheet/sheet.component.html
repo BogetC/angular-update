@@ -1,0 +1,258 @@
+<div *ngIf="!!sheet" class="container">
+  <h1 class="title is-1">{{ sheet.NAME }} details</h1>
+
+  <div class="is-flex is-flex-direction-column gap-4">
+    <div>
+      <div><b>Start:</b> {{ sheet.START | date : "short" }}</div>
+      <div><b>End:</b> {{ sheet.END | date : "short" }}</div>
+      <div><b>Created at:</b> {{ sheet.DATE_CREATED | date : "short" }}</div>
+      <div><b>Updated at:</b> {{ sheet.DATE_UPDATED | date : "short" }}</div>
+    </div>
+
+    <div>
+      <h2 class="title is-2 is-flex is-align-items-center gap-3">
+        <span>Students</span>
+      </h2>
+      <div class="is-flex is-flex-direction-column gap-3">
+        <div
+          class="is-flex is-align-items-center is-justify-content-space-between"
+        >
+          <div class="field is-grouped is-grouped-multiline">
+            <div class="control">
+              <div class="tags has-addons">
+                <span class="tag is-success">{{ getPresents() }}</span>
+                <span class="tag is-success is-light">Present</span>
+              </div>
+            </div>
+
+            <div class="control">
+              <div class="tags has-addons">
+                <span class="tag is-warning">{{ getWaiting() }}</span>
+                <span class="tag is-warning is-light">Waiting</span>
+              </div>
+            </div>
+
+            <div class="control">
+              <div class="tags has-addons">
+                <span class="tag is-danger">{{ getAbsents() }}</span>
+                <span class="tag is-danger is-light">Absent</span>
+              </div>
+            </div>
+
+            <div class="control">
+              <div class="tags has-addons">
+                <span class="tag is-dark">{{ getTotal() }}</span>
+                <span class="tag is-light">Total</span>
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="button is-info"
+            (click)="onCreateStudentModalOpen()"
+          >
+            <span class="icon">
+              <fa-icon [icon]="faPlus" />
+            </span>
+            <span>Add</span>
+          </button>
+        </div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Created at</th>
+              <th>Updated at</th>
+              <th>State</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let student of sheet.STUDENTS">
+              <td>
+                <b>{{ student.LASTNAME }}</b> {{ student.FIRSTNAME }}
+              </td>
+
+              <td>{{ student.dateCreated | date : "short" }}</td>
+
+              <td>{{ student.dateUpdated | date : "short" }}</td>
+
+              <td>
+                <div
+                  *ngIf="student.presenceState === 'PRESENT'; else spsElseBlock"
+                >
+                  <div class="is-flex is-flex-direction-column gap-1">
+                    <span class="tag is-success is-light">
+                      <span class="icon">
+                        <fa-icon [icon]="faCheck" />
+                      </span>
+                      <span *ngIf="!!student.signatureTimestamp">
+                        {{ student.signatureTimestamp | date : "short" }}
+                      </span>
+                    </span>
+
+                    <span
+                      *ngIf="!!student.delay"
+                      class="tag is-warning is-light"
+                    >
+                      <span class="icon">
+                        <fa-icon [icon]="faWarning" />
+                      </span>
+                      <span>{{ student.delay }}min late</span>
+                    </span>
+
+                    <div *ngIf="student.signature" class="signature-ctn">
+                      <img
+                        src="{{ student.signature }}"
+                        alt="student-signature"
+                        class="signature"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <ng-template #spsElseBlock>
+                  <div
+                    *ngIf="
+                      student.presenceState === 'ABSENT';
+                      else sps3ElseBlock
+                    "
+                  >
+                    <div *ngIf="student.absenceComment; else sabElseBlock">
+                      <div class="is-flex is-flex-direction-column gap-1">
+                        <span class="tag is-danger is-light">
+                          <span class="icon">
+                            <fa-icon [icon]="faCheck" />
+                          </span>
+                          <span>Excused</span>
+                        </span>
+                        <button
+                          class="button is-info is-small"
+                          (click)="
+                            onActiveStudentAbsentModalClick(student, true)
+                          "
+                        >
+                          <span class="icon">
+                            <fa-icon [icon]="faEye" />
+                          </span>
+                          <span>Explanation</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <ng-template #sabElseBlock>
+                      <div class="is-flex is-flex-direction-column gap-1">
+                        <span class="tag is-danger is-light">
+                          <span class="icon">
+                            <fa-icon [icon]="faClose" />
+                          </span>
+                          <span>Absent</span>
+                        </span>
+                      </div>
+                    </ng-template>
+                  </div>
+
+                  <ng-template #sps3ElseBlock>
+                    <div class="is-flex is-flex-direction-column gap-1">
+                      <span class="tag is-warning is-light">
+                        <span class="icon">
+                          <fa-icon [icon]="faBan" />
+                        </span>
+                        <span>Not set yet</span>
+                      </span>
+                    </div>
+                  </ng-template>
+                </ng-template>
+              </td>
+
+              <td>
+                <div
+                  class="dropdown"
+                  [ngClass]="{
+                    'is-active': activeStudentActionDropdown?.id === student.id
+                  }"
+                  (click)="onActiveStudentDropdownClick(student)"
+                >
+                  <div class="dropdown-trigger">
+                    <button
+                      class="button"
+                      aria-haspopup="true"
+                      aria-controls="dropdown-menu"
+                    >
+                      <span>Actions</span>
+                      <span class="icon is-small">
+                        <fa-icon [icon]="faAngleDown" />
+                      </span>
+                    </button>
+                  </div>
+                  <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                    <div class="dropdown-content">
+                      <a
+                        class="button dropdown-item"
+                        (click)="onActiveStudentCommentModalClick(student)"
+                      >
+                        {{ student.comment ? "Edit comment" : "Add comment" }}
+                      </a>
+                      <hr
+                        *ngIf="!student.presenceState"
+                        class="dropdown-divider"
+                      />
+                      <a
+                        *ngIf="!student.presenceState"
+                        class="button dropdown-item"
+                        (click)="onActiveStudentAbsentModalClick(student)"
+                        >Declare absent</a
+                      >
+                      <a
+                        *ngIf="!student.presenceState"
+                        class="button dropdown-item"
+                        (click)="onActiveStudentSignModalClick(student)"
+                        >Sign</a
+                      >
+                      <hr class="dropdown-divider" />
+                      <a
+                        class="button dropdown-item has-text-danger"
+                        (click)="deleteStudent(student.id)"
+                        >Delete</a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <app-sign-modal
+    *ngIf="activeStudentSignModal"
+    [student]="activeStudentSignModal"
+    [onSubmit]="updateStudentSignature"
+    [onClose]="onActiveStudentSignModalClose"
+  />
+
+  <app-comment-modal
+    *ngIf="activeStudentCommentModal"
+    [student]="activeStudentCommentModal"
+    [onSubmit]="updateStudentComment"
+    [onClose]="onActiveStudentCommentModalClose"
+  />
+
+  <app-absent-modal
+    *ngIf="activeStudentAbsentModal"
+    [student]="activeStudentAbsentModal"
+    [readOnly]="activeStudentAbsentModalReadOnly"
+    [onSubmit]="updateStudentAbsent"
+    [onClose]="onActiveStudentAbsentModalClose"
+  />
+
+  <app-create-student-modal-form
+    *ngIf="isCreateStudentModalActive"
+    [onSubmit]="createStudent"
+    [onClose]="onCreateStudentModalClose"
+  />
+</div>

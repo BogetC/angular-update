@@ -1,0 +1,11 @@
+.canvas-ctn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#canvas {
+  border: 2px dotted black;
+  border-radius: 6px;
+}

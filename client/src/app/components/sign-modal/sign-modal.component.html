@@ -1,0 +1,78 @@
+<div class="modal is-active">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">
+        <b>{{ student?.LASTNAME }}</b> {{ student?.FIRSTNAME }}
+      </p>
+      <button
+        class="delete"
+        aria-label="close"
+        (click)="onModalClose()"
+      ></button>
+    </header>
+
+    <section class="modal-card-body">
+      <form (ngSubmit)="onSubmitSignature()" #signForm="ngForm">
+        <div class="is-flex is-flex-direction-column gap-3">
+          <div class="canvas-ctn">
+            <p>Signature</p>
+            <canvas #canvas id="canvas"></canvas>
+          </div>
+
+          <label for="isDelayed" class="checkbox">
+            <input
+              id="isDelayed"
+              name="isDelayed"
+              type="checkbox"
+              [(ngModel)]="isDelayed"
+              (change)="onIsDelayedChanged()"
+            />
+            Delayed
+          </label>
+
+          <div>
+            <label for="delay">Arrival delay (In minutes)</label>
+            <input
+              type="number"
+              class="input"
+              id="delay"
+              name="delay"
+              required
+              min="1"
+              #delayInput="ngModel"
+              [(ngModel)]="delay"
+              [disabled]="!isDelayed"
+            />
+          </div>
+
+          <div
+            *ngIf="
+              delayInput.invalid && (delayInput.dirty || delayInput.touched)
+            "
+            class="has-text-danger"
+          >
+            <div *ngIf="delayInput.errors?.['required']">
+              Value is required.
+            </div>
+            <div *ngIf="delayInput.errors?.['min']">
+              Value must be at least 1 minute.
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="button {{ isDelayed ? 'is-warning' : 'is-success' }}"
+          [disabled]="!signForm.form.valid"
+        >
+          {{ isDelayed ? "Confirmed delayed arrival" : "Confirm arrival" }}
+        </button>
+      </form>
+    </section>
+
+    <footer class="modal-card-foot">
+      <button class="button" (click)="onModalClose()">Close</button>
+    </footer>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+<p>absent-modal works!</p>
+<div class="modal is-active">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">
+        <b>{{ student?.LASTNAME }}</b> {{ student?.FIRSTNAME }}
+      </p>
+      <button
+        class="delete"
+        aria-label="close"
+        (click)="onModalClose()"
+      ></button>
+    </header>
+
+    <section class="modal-card-body">
+      <form (ngSubmit)="onSubmitComment()">
+        <label class="checkbox">
+          <input
+            type="checkbox"
+            class="checkbox"
+            id="excusable"
+            name="excusable"
+            (change)="onExcusableChange()"
+            [disabled]="readOnly"
+            [(ngModel)]="excusable"
+          />
+          Excusable
+        </label>
+
+        <div>
+          <label for="absenceComment">Absence comment</label>
+          <textarea
+            type="text"
+            class="textarea"
+            id="absenceComment"
+            name="absenceComment"
+            [disabled]="readOnly || !excusable"
+            [(ngModel)]="absenceComment"
+          ></textarea>
+        </div>
+
+        <div class="buttons">
+          <button
+            class="button {{ excusable ? 'is-success' : 'is-danger' }}"
+            (click)="onSubmitComment()"
+            [disabled]="readOnly"
+          >
+            {{ excusable ? "Excuse absence" : "Declare absent" }}
+          </button>
+          <button type="button" class="button" (click)="onClear()">
+            Clear
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <footer class="modal-card-foot">
+      <button class="button" (click)="onModalClose()">Close</button>
+    </footer>
+  </div>
+</div>

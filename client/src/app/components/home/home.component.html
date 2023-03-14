@@ -1,0 +1,31 @@
+<div class="container">
+  <h1 class="title is-1">Manage your attendance sheets</h1>
+
+  <div class="is-flex is-align-items-center gap-3">
+    <a class="card" routerLink="/sheets">
+      <div class="card-content">
+        <div class="content">
+          <div class="is-flex is-flex-direction-column is-align-items-center">
+            <span class="icon is-large">
+              <fa-icon [icon]="faList" />
+            </span>
+            <div>Consult all sheets</div>
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <a class="card" routerLink="/sheets/create">
+      <div class="card-content">
+        <div class="content">
+          <div class="is-flex is-flex-direction-column is-align-items-center">
+            <span class="icon is-large">
+              <fa-icon [icon]="faPlus" />
+            </span>
+            <div>Create sheet</div>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>

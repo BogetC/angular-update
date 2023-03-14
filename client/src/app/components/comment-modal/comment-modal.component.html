@@ -1,0 +1,60 @@
+<div class="modal is-active">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">
+        <b>{{ student?.LASTNAME }}</b> {{ student?.FIRSTNAME }}
+      </p>
+      <button
+        class="delete"
+        aria-label="close"
+        (click)="onModalClose()"
+      ></button>
+    </header>
+
+    <section class="modal-card-body">
+      <form (ngSubmit)="onSubmitComment()" #commentForm="ngForm">
+        <div>
+          <label for="comment">Comment</label>
+          <textarea
+            type="text"
+            class="textarea"
+            id="comment"
+            name="comment"
+            #comment="ngModel"
+            required
+            minlength="4"
+            [(ngModel)]="studentComment"
+          ></textarea>
+        </div>
+
+        <div
+          *ngIf="comment.invalid && (comment.dirty || comment.touched)"
+          class="has-text-danger"
+        >
+          <div *ngIf="comment.errors?.['required']">Value is required.</div>
+          <div *ngIf="comment.errors?.['minlength']">
+            Value must be at least 4 characters long.
+          </div>
+        </div>
+
+        <div class="buttons">
+          <button
+            type="submit"
+            class="button is-success"
+            [disabled]="!commentForm.form.valid"
+          >
+            Submit
+          </button>
+          <button type="button" class="button" (click)="onClear()">
+            Clear
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <footer class="modal-card-foot">
+      <button class="button" (click)="onModalClose()">Close</button>
+    </footer>
+  </div>
+</div>

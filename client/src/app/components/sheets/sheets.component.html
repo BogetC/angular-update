@@ -1,0 +1,61 @@
+<div class="container">
+  <h1 class="title is-1">Attendance sheets</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Created at</th>
+        <th>Updated at</th>
+        <th>Students</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let sheet of sheets">
+        <th>{{ sheet.NAME }}</th>
+        <td>{{ sheet.START | date : "short" }}</td>
+        <td>{{ sheet.END | date : "short" }}</td>
+        <td>{{ sheet.DATE_CREATED | date : "short" }}</td>
+        <td>{{ sheet.DATE_UPDATED | date : "short" }}</td>
+        <td>{{ sheet.STUDENTS.length }}</td>
+        <td>
+          <div
+            class="dropdown"
+            [ngClass]="{
+              'is-active': activeSheetActionDropdown?.ID === sheet.ID
+            }"
+            (click)="onActiveSheetDropdownClick(sheet)"
+          >
+            <div class="dropdown-trigger">
+              <button
+                class="button"
+                aria-haspopup="true"
+                aria-controls="dropdown-menu"
+              >
+                <span>Actions</span>
+                <span class="icon is-small">
+                  <fa-icon [icon]="faAngleDown" />
+                </span>
+              </button>
+            </div>
+            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+              <div class="dropdown-content">
+                <a class="dropdown-item" routerLink="/sheets/{{ sheet.ID }}"
+                  >Open</a
+                >
+                <hr class="dropdown-divider" />
+                <a
+                  class="button dropdown-item has-text-danger"
+                  (click)="onDeleteSheet(sheet.ID)"
+                  >Delete</a
+                >
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
